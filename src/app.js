@@ -1,17 +1,10 @@
 const express = require("express");
+const conexao = require("../infra/conexao");
 const app = express();
 /* const validate = require("./middleware/handleValidation");
 const emptyValidation = require("./middleware/handleReqEmpty");
  */
 app.use(express.json());
-
-//mock
-const selecoes = [
-  { id: 1, selecao: "Brasil", grupo: "A" },
-  { id: 2, selecao: "Alemanha", grupo: "B" },
-  { id: 3, selecao: "Argentina", grupo: "C" },
-  { id: 4, selecao: "Portugal", grupo: "D" },
-];
 
 //Captura o elemento pelo id
 const searchForId = (id) => {
@@ -23,21 +16,44 @@ const searchForIndexSoccerTeam = (id) => {
   return selecoes.findIndex((selecoes) => selecoes.id == id);
 };
 
-//Rota padrão ou rota raiz
-app.get("/", (req, res) => {
-  console.log("Hello from Express, hello world!");
-  res.send("Hello from Express, Olá mundo!");
-});
-
+//Rotas
+//Rota de get seleções, todas.
 app.get("/selecoes", (req, res) => {
-  res.status(200).send(selecoes);
+  //res.status(200).send(selecoes);
+  const sql = "SELECT * FROM selecoes;";
+  conexao.query(sql, (err, result, fields) => {
+    if (err) {
+      res.status(404).json({ erro: err });
+    } else {
+      res.status(200).send(result);
+    }
+  });
 });
 
+//Rota de get por id da seleção.
 app.get("/selecoes/:id", (req, res) => {
   const id = req.params.id;
-  res.status(200).send(searchForId(id));
+  /* res.status(200).send(searchForId(id)); */
+  //poderia ser feito da seguinte forma:
+  //const sql = "SELECT * FROM selecoes WHERE id=?"
+  //conexao.query(sql, id, (err, result, fields)=> {...}) passando o id dentro da query como parametros extas e colocando a ? no comando SQL
+
+  const sql = `SELECT * FROM selecoes WHERE id=${id}`;
+  conexao.query(sql, (err, result, fields) => {
+    const linha = result[0];
+    if (linha !== true) {
+      const error = new Error("ID não foi encontrado na base de dados!")
+      res.send({erro: error})
+    }
+    if (err) {
+      res.status(404).json({ erro: err });
+    } else {
+      res.status(200).send(linha);
+    }
+  });
 });
 
+//Rota para adicionar uma nova seleção.
 app.post("/selecoes", (req, res) => {
   const id = req.params.id;
   if (id === true) {
@@ -48,6 +64,7 @@ app.post("/selecoes", (req, res) => {
   }
 });
 
+//Rota para deletar uma seleção, passando um id
 app.delete("/selecoes/:id", (req, res) => {
   const id = req.params.id;
   const index = searchForIndexSoccerTeam(req.params.id);
@@ -60,6 +77,7 @@ app.delete("/selecoes/:id", (req, res) => {
   }
 });
 
+//Rota para atualizar uma seleção passando um id
 app.put("/selecoes/:id", (req, res) => {
   const id = req.params.id;
   const index = searchForIndexSoccerTeam(id);
@@ -69,7 +87,7 @@ app.put("/selecoes/:id", (req, res) => {
     /* selecoes.filter(selecoes => selecoes.id !== index) */
     selecoes[index].selecao = req.body.selecao;
     selecoes[index].grupo = req.body.grupo;
-    res.json( selecoes);
+    res.json(selecoes);
   }
 });
 
