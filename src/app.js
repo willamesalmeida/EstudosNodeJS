@@ -36,7 +36,7 @@ app.get("/selecoes/:id", SelecaoController.show
 
 
 //Rota para adicionar uma nova seleção.
-app.post("/selecoes", SelecaoController.update
+app.post("/selecoes", SelecaoController.store
 
   /* if (id === true) {
     selecoes.push(req.body);

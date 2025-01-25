@@ -1,12 +1,15 @@
 const conexao = require("../database/conexao");
 
 class SelecaoRepository {
+
+  //Metodos do CRUD
+
   create(selecao) {
-    const sql = `INSERT INTO selecoes SET ?;`;
+    const sql = `INSERT INTO selecoes SET ?`;
     return new Promise((resolve, reject) => {
       conexao.query(sql, selecao, (err, result) => {
         if (err) {
-          return reject(`Não foi possivel adicionar a seleão. Erro: ${err}`);
+          return reject(`Não foi possivel adicionar a seleção. Erro: ${err}`);
         } else {
           const row = JSON.parse(JSON.stringify(result));
           return resolve(row);

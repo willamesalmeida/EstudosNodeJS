@@ -15,8 +15,8 @@ class SelecaoController {
 
   async store(req, res) {
     const selecao = req.body;
-    const create = await SelecaoRepository.create(selecao);
-    res.json(create);
+    const createTeam = await SelecaoRepository.create(selecao);
+    res.json(createTeam);
   }
 
   async delete(req, res) {
