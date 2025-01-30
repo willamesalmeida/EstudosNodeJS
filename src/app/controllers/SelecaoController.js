@@ -1,6 +1,8 @@
-const conexao = require("../database/conexao");
-const SelecaoRepository = require("../repositories/SelecaoRepository");
+import SelecaoRepository from "../repositories/SelecaoRepository.js"
 
+/* const conexao = require("../database/conexao");
+const SelecaoRepository = require("../repositories/SelecaoRepository");
+ */
 class SelecaoController {
   async index(req, res) {
     const selecoes = await SelecaoRepository.findAll();
@@ -33,4 +35,5 @@ class SelecaoController {
   }
 }
 
-module.exports = new SelecaoController();
+/* module.exports = new SelecaoController(); */
+export default new SelecaoController()

@@ -1,4 +1,6 @@
-const app = require("./src/app");
+import app from "./app.js";
+
+/* const app = require("./app"); */
 const PORT = 5500;
  
 //configuração para funcionar o servidor g

@@ -1,10 +1,20 @@
-const express = require("express");
+import express from "express"
+import SelecaoController from "./app/controllers/SelecaoController.js";
+
+
+/* import conexao from "./app/database/conexao"; */
+
+/* const express = require("express");
 const conexao = require("./app/database/conexao");
-const app = express();
-const SelecaoController = require("./app/controllers/SelecaoController.js")
-/* const validate = require("./middleware/handleValidation");
+const SelecaoController = require("./app/controllers/SelecaoController.js") 
+
+
+const validate = require("./middleware/handleValidation");
 const emptyValidation = require("./middleware/handleReqEmpty");
- */
+*/
+
+const app = express();
+
 app.use(express.json());
 
 /* //Captura o elemento pelo id
@@ -78,4 +88,6 @@ app.put("/selecoes/:id", SelecaoController.update
   } */
    );
 
-module.exports = app;
+export default app;
+
+/* module.exports = app; */

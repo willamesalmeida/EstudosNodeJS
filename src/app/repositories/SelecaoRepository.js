@@ -1,78 +1,40 @@
-const conexao = require("../database/conexao");
+import { querysConsult } from "../database/conexao.js";
+
+/* const { querysConsult } = require("../database/conexao"); */
 
 class SelecaoRepository {
-
   //Metodos do CRUD
 
   create(selecao) {
     const sql = `INSERT INTO selecoes SET ?`;
-    return new Promise((resolve, reject) => {
-      conexao.query(sql, selecao, (err, result) => {
-        if (err) {
-          return reject(`Não foi possivel adicionar a seleção. Erro: ${err}`);
-        } else {
-          const row = JSON.parse(JSON.stringify(result));
-          return resolve(row);
-        }
-      });
-    });
+    const mensagemReject = "Não foi possivel cadastrar uma nova seleção";
+    return querysConsult(sql, selecao, mensagemReject);
   }
 
   findAll() {
     const sql = `SELECT * FROM selecoes;`;
-    return new Promise((resolve, reject) => {
-      conexao.query(sql, (err, result) => {
-        if (err) {
-          return reject(`A seleções não foram encontradas. Erro: ${err}`);
-        } else {
-          const row = JSON.parse(JSON.stringify(result));
-          return resolve(row);
-        }
-      });
-    });
+    const mensagemReject = "Não foi possivel localizar as selecões";
+    return querysConsult(sql, mensagemReject);
   }
 
   findById(id) {
     const sql = `SELECT * FROM selecoes WHERE id=?;`;
-    return new Promise((resolve, reject) => {
-      conexao.query(sql, id, (err, result) => {
-        if (err) {
-          return reject(`A seleção não foi encontrada. Erro: ${err}`);
-        } else {
-          const row = JSON.parse(JSON.stringify(result));
-          return resolve(row);
-        }
-      });
-    });
+    const mensagemReject = "Não foi possivel encontrar essa seleção";
+    return querysConsult(sql, id, mensagemReject);
   }
 
-  update(id, selecao) {
-    const sql = `UPDATE selecoes SET ? WHERE id=?;`
-    return new Promise((resolve, reject) => {
-      conexao.query(sql, [selecao, id], (err, result) => {
-        if (err) {
-          return reject(`Não foi possivel atualizar a seleção. Erro: ${err}`)
-        } else {
-          const row = JSON.parse(JSON.stringify(result))
-          return resolve(row)
-        }
-      });
-    })
+  update(selecao, id) {
+    const sql = `UPDATE selecoes SET ? WHERE id=?;`;
+    const mensagemReject = "Não foi possivel atualizar a seleção"
+    return querysConsult(sql,[selecao, id], mensagemReject)
   }
 
   delete(id) {
-    const sql = `DELETE FROM selecoes WHERE id=?`
-    return new Promise((resolve, reject) => {
-      conexao.query(sql, id, (err, result) => {
-        if(err){
-          return reject(`Não foi possivel deletar a seleção. Erro: ${err}`)
-        }else{
-          const row = JSON.parse(JSON.stringify(result))
-          return resolve(row);
-        }
-      })
-    })
+    const sql = `DELETE FROM selecoes WHERE id=?`;
+    const mensagemReject = "Não foi possivel apagar a seleção"
+    return querysConsult(sql, id, mensagemReject)
   }
 }
 
-module.exports = new SelecaoRepository();
+export default new SelecaoRepository();
+/* module.exports = new SelecaoRepository(); */
