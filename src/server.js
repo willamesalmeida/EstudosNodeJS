@@ -1,7 +1,7 @@
 import app from "./app.js";
 
 /* const app = require("./app"); */
-const PORT = 5500;
+const PORT = process.env.PORT || 5500;
  
 //configuração para funcionar o servidor g
  app.listen(PORT, () => {
